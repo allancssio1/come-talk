@@ -1,11 +1,9 @@
 const { server, io } = require("./config/server");
 
 io.on("connection", (socket) => {
-  io.on("params", (data) => {
-    console.log("data:", data);
-  });
   socket.on("sendMessage", (data) => {
-    socket.broadcast.emit("receivedMessage", data);
+    console.log("🚀", data);
+    socket.emit(`receivedMessage-${data.receivedId}`, data);
   });
 });
 

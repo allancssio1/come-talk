@@ -1,25 +1,23 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import io from "socket.io-client";
-import { v4 as id } from "uuid";
 
-const myId = id();
-const socket = io("http://localhost:3000");
-socket.on("connect", () => console.log("io new Connection"));
+const socket = io.connect("http://localhost:3000/chat");
+socket.on("connection", () => {});
 
 export const Chat = () => {
+  const { id } = useParams();
   const [message, setMessage] = useState("");
+  const [receivedId, setReceivedId] = useState("");
   const [messages, setMessages] = useState([]);
+  const socket = io("http://localhost:3000");
 
   useEffect(() => {
     const handleNewMessage = (newMessage) => {
-      console.log(
-        "🚀 ~ file: Chat.jsx:15 ~ handleNewMessage ~ newMessage:",
-        newMessage,
-      );
       setMessages([...messages, newMessage]);
     };
 
-    socket.on("receivedMessage", handleNewMessage);
+    socket.on(`receivedMessage`, handleNewMessage);
 
     return () => socket.off("sendMessage", handleNewMessage);
   }, [messages]);
@@ -30,7 +28,8 @@ export const Chat = () => {
     event.preventDefault();
     if (message.trim()) {
       socket.emit("sendMessage", {
-        id: myId,
+        sendId: id,
+        receivedId,
         message,
       });
       setMessage("");
@@ -65,13 +64,13 @@ export const Chat = () => {
             return (
               <li
                 className={`list__item list__item--${
-                  item.id === myId ? "mine" : "other"
+                  item.id === id ? "mine" : "other"
                 }`}
                 key={item.id}
               >
                 <span
                   className={`message message--${
-                    item.id === myId ? "mine" : "other"
+                    item.id === id ? "mine" : "other"
                   }`}
                 >
                   {item.message}

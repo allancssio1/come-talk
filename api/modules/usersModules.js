@@ -2,9 +2,15 @@ const { randomUUID } = require("node:crypto");
 const users = [
   {
     id: randomUUID(),
-    username: "allan",
-    name: "allan",
-    password: "123456",
+    username: "b",
+    name: "b",
+    password: "1",
+  },
+  {
+    id: randomUUID(),
+    username: "a",
+    name: "a",
+    password: "1",
   },
 ];
 
