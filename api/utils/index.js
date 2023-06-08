@@ -13,4 +13,4 @@ const utils = {
   },
 };
 
-module.exports = {};
+module.exports = { utils };
